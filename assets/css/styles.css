@@ -169,12 +169,15 @@
         position: relative;
         row-gap: 3rem;
         padding: 5rem 0 7rem;
+        z-index: 1;
       }
       section#home.home.bd-grid {
         top: 40px;
       }
       .home__data {
         align-self: center;
+        position: relative;
+        z-index: 2;
       }
       .home__title {
         font-size: var(--big-font-size);
@@ -220,9 +223,31 @@
         font-weight: var(--font-semi);
         border-radius: .5rem;
         transition: 0.08s;
+        cursor: pointer;
+        position: relative;
+        z-index: 9999;
+        text-decoration: none;
+        border: none;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        pointer-events: auto;
+        touch-action: manipulation;
       }
       .button:hover {
         box-shadow: 0px 10px 36px rgba(0, 0, 0, 0.15);
+      }
+      .button:active {
+        transform: scale(0.98);
+      }
+      .button:focus {
+        outline: 2px solid var(--first-color);
+        outline-offset: 2px;
       }
 
       /* ===== ABOUT =====*/
@@ -466,6 +491,19 @@
     cursor: pointer;
     padding-right: 30px;
     position: relative;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    outline: none;
+  }
+  .menu-icon img {
+    pointer-events: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
   }
   div.menu-icon {
     padding-left: 0px;
@@ -491,10 +529,12 @@
     padding-top: 0;
     border-top: none !important;
     border-bottom: none !important;
+    pointer-events: none;
   }
   .mobile-menu-container.active {
     right: 0;
     left: auto;
+    pointer-events: auto;
   }
   .close-icon {
     position: absolute;
@@ -552,6 +592,7 @@
   }
   .menu-toggle {
     position: relative;
+    z-index: 1;
   }
   .mobile-menu-overlay {
     display: none;
@@ -803,9 +844,7 @@
 
 body.no-scroll {
   overflow: hidden !important;
-  height: 100vh;
-  position: fixed;
-  width: 100vw;
+  position: relative;
 }
 
 .projects__container {
@@ -979,6 +1018,30 @@ body.no-scroll {
   .project__desc {
     font-size: 0.98rem;
   }
+}
+
+/* Aggressively remove top blue line when mobile menu is open */
+.mobile-menu-container.active ~ .l-header,
+.mobile-menu-container.active ~ .l-header::before,
+.mobile-menu-container.active ~ .l-header::after,
+.mobile-menu-container.active ~ .nav,
+.mobile-menu-container.active ~ .nav::before,
+.mobile-menu-container.active ~ .nav::after,
+nav.mobile-nav,
+nav.mobile-nav::before,
+nav.mobile-nav::after {
+  box-shadow: none !important;
+  border: none !important;
+  border-top: none !important;
+  background-image: none !important;
+}
+
+.l-header::before,
+.l-header::after,
+nav.mobile-nav::before,
+nav.mobile-nav::after {
+  display: none !important;
+  content: none !important;
 }
 
 

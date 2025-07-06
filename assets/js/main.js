@@ -11,22 +11,25 @@ mobileNavLinks.forEach((link) => link.addEventListener("click", linkAction));
 
 const navLink = document.querySelectorAll(".nav__link");
 
+// Get all sections
+const sections = document.querySelectorAll("section[id]");
+
 function scrollActive() {
   const scrollY = window.pageYOffset;
 
   sections.forEach((current) => {
     const sectionHeight = current.offsetHeight;
     const sectionTop = current.offsetTop - 50;
-    sectionId = current.getAttribute("id");
+    const sectionId = current.getAttribute("id");
 
     if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
       document
         .querySelector(".nav__menu a[href*=" + sectionId + "]")
-        .classList.add("active");
+        ?.classList.add("active");
     } else {
       document
         .querySelector(".nav__menu a[href*=" + sectionId + "]")
-        .classList.remove("active");
+        ?.classList.remove("active");
     }
   });
 }
@@ -61,16 +64,42 @@ window.addEventListener("scroll", () => {
   }
 });
 
-menuIcon.addEventListener("click", () => {
+menuIcon.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  // Store current scroll position
+  const scrollPos = window.pageYOffset;
+  
+  // Temporarily disable smooth scrolling
+  document.documentElement.style.scrollBehavior = 'auto';
+  
   mobileMenuContainer.classList.add("active");
   if (mobileMenuOverlay) mobileMenuOverlay.classList.add("active");
   document.body.classList.add("no-scroll");
+  
+  // Restore scroll position and smooth scrolling
+  requestAnimationFrame(() => {
+    window.scrollTo(0, scrollPos);
+    document.documentElement.style.scrollBehavior = 'smooth';
+  });
 });
 
-closeIcon.addEventListener("click", () => {
+closeIcon.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  // Store current scroll position
+  const scrollPos = window.pageYOffset;
+  
   mobileMenuContainer.classList.remove("active");
   if (mobileMenuOverlay) mobileMenuOverlay.classList.remove("active");
   document.body.classList.remove("no-scroll");
+  
+  // Ensure scroll position is maintained
+  requestAnimationFrame(() => {
+    window.scrollTo(0, scrollPos);
+  });
 });
 
 if (mobileMenuOverlay) {
@@ -101,37 +130,7 @@ seeMoreLinks.forEach((link) => {
   });
 });
 
-const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-  contactForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const message = document.getElementById('message').value.trim();
 
-    if (!name || !email || !message) {
-      alert('Please fill in all fields.');
-      return;
-    }
-
-    try {
-      const response = await fetch('http://localhost:3001/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message })
-      });
-      const data = await response.json();
-      if (response.ok) {
-        alert('Message sent successfully!');
-        // window.location.href = 'thanks/thanks.html';
-      } else {
-        alert(data.error || 'Failed to send message.');
-      }
-    } catch (err) {
-      alert('Failed to send message. Please check your connection.');
-    }
-  });
-}
 
 // Work image modal/lightbox functionality
 (function() {
@@ -191,16 +190,4 @@ if (contactForm) {
   });
 })();
 
-// Ensure WhatsApp Contact button works on mobile
-(function() {
-  var contactBtn = document.querySelector('.home__data .button');
-  if (!contactBtn) return;
-  contactBtn.addEventListener('click', function(e) {
-    var isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
-    if (isMobile) {
-      e.preventDefault();
-      window.location.href = 'https://wa.me/message/EFV2PFXAAINFG1';
-    }
-    // On desktop, default behavior (opens in new tab)
-  });
-})();
+
